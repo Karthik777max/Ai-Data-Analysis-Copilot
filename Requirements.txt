@@ -2,3 +2,6 @@ streamlit>=1.32
 pandas>=2.0
 SQLAlchemy>=2.0
 psycopg[binary]>=3.1
+google-genai>=2.0.0
+mcp>=1.28,<2
+sqlglot>=26,<30

@@ -7,6 +7,7 @@ from pathlib import Path
 import pandas as pd
 import streamlit as st
 from database import admin_activity, database_status, list_tables, record_login, record_upload, save_upload, table_preview
+from Backend.model import ask_llm
 
 LOGO_PATH = Path(__file__).parent / "assets" / "analyst-symbol.png"
 LOGO_DATA = base64.b64encode(LOGO_PATH.read_bytes()).decode("ascii")
@@ -144,11 +145,17 @@ if page == "Overview":
         st.dataframe(pd.DataFrame([{"Dataset": d["name"], "Rows": d["rows"], "Columns": d["columns"], "Added": d["added"]} for d in st.session_state.datasets]), use_container_width=True, hide_index=True)
     else:
         st.info("Your workspace is ready for its first dataset. Open **Datasets** to upload a CSV and start exploring.")
-    st.markdown('<div class="section-title">Ask your data</div>', unsafe_allow_html=True)
-    question = st.text_input("Ask a question", placeholder="e.g. Which product had the most sales last quarter?", label_visibility="collapsed")
+    st.markdown('<div class="section-title">Ask anything</div>', unsafe_allow_html=True)
+    question = st.text_input("Ask a question", placeholder="Ask a general question, an app FAQ, or something about your data...", label_visibility="collapsed")
     if st.button("✳  Ask copilot", type="primary"):
-        if question.strip(): st.info("Your question is ready. Connect an AI provider and dataset query layer to enable generated answers.")
-        else: st.warning("Type a question first.")
+        if question.strip():
+            with st.spinner("Checking your database and preparing an answer..."):
+                try:
+                    st.markdown(ask_llm(question))
+                except Exception as error:
+                    st.error(f"Could not answer that question: {error}")
+        else:
+            st.warning("Type a question first.")
 
 elif page == "Datasets":
     st.markdown('<div class="eyebrow">YOUR DATA</div><h1>Datasets</h1><p style="color:#788783">Upload and manage the files your copilot can explore.</p>', unsafe_allow_html=True)
