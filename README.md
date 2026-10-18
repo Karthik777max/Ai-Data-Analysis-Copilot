@@ -197,6 +197,7 @@ flowchart TD
   Git and GitHub                      Version control and project
                                       collaboration
   -----------------------------------------------------------------------
+  #to show working of pull request
 
 SQLite or PostgreSQL may be considered later if the project needs
 persistent storage. A database is not required for a basic
