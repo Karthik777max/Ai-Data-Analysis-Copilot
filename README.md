@@ -196,6 +196,7 @@ flowchart TD
 
   Git and GitHub                      Version control and project
                                       collaboration
+  Docker and Vercel                   Deployment and Maintainance
   -----------------------------------------------------------------------
 
 SQLite or PostgreSQL may be considered later if the project needs
